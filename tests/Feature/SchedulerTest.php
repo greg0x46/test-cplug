@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Carbon\Carbon;
 use Tests\TestCase;
 
 class SchedulerTest extends TestCase
@@ -9,15 +10,29 @@ class SchedulerTest extends TestCase
 
     /**
      * Para efeitos de avaliação esse método esta sendo implementado no proprio arquivo de testes
-     * 
+     *
      * @param array $selected (Horario de inicio e fim em que se deseja consultar)
      * @param array $blocked (Horario de inicio e fim que já está ocupado)
-     * 
+     *
      * @return bool
      */
     private function isBusy($selected, $blocked)
     {
-        return true;
+        $selected = $this->parseArrayOfTime($selected);
+        $blocked = $this->parseArrayOfTime($blocked);
+
+        return !($selected['start'] >= $blocked['end'] || $selected['end'] <= $blocked['start']);
+    }
+
+    private function parseArrayOfTime(array $times): array
+    {
+        $parsed = [];
+        foreach ($times as $key => $time) {
+            $time = explode(':', $time);
+            $parsed[$key] = today()->setHour($time[0])->setMinutes($time[1]);
+        }
+
+        return $parsed;
     }
 
 
