@@ -21,6 +21,7 @@ class ApiTest extends TestCase
             'dataVenda' => '2021-04-18',
         ]);
 
+
         $response->assertStatus(200)->assertJson([
             'valor_da_compra' => 10513.88,
             'valor_da_venda' => 46656.85,
