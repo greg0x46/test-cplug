@@ -10,7 +10,7 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -18,14 +18,7 @@ class CustomerController extends Controller
         $cst = new Customer();
         $cst->name = $request->name;
         $cst->save();
-        $categories = $request->categories;
-        $nCat = count($categories);
-        for($i = 0; $i < $nCat; $i++) {
-
-            $custCatData = ['customer_id' => $cst->id, 'category_name' => $categories[$i], 'created_at' => now(), 'updated_at' => now()];
-
-            \DB::table('customer_categories')->insert($custCatData);
-        }
+        $cst->addCategories(current($request->only('categories')));
 
         return response()->json(['customer_id' => $cst->id], 201);
     }
@@ -33,12 +26,15 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customer  $customer
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Customer $customer
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Customer $customer)
     {
+        $customer->update($request->only(['name']));
+        $customer->syncCategories(current($request->only('categories')));
 
+        return response()->json(['customer_id' => $customer->id]);
     }
 }

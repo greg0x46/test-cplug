@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Customer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class CustomerTest extends TestCase
@@ -20,7 +21,7 @@ class CustomerTest extends TestCase
     {
         $response = $this->post('/api/customer', [
             'name' => $this->faker->name(),
-            'categories' => ['Ouro','Prata','Diamante']
+            'categories' => ['Ouro', 'Prata', 'Diamante']
         ]);
 
         $response->assertStatus(201);
@@ -48,12 +49,12 @@ class CustomerTest extends TestCase
         //atualiza o nome e as categorias o cliente
         $response = $this->put("/api/customer/{$customer->id}", [
             'name' => $newName,
-            'categories' => ['Prata','Diamante','Esmeralda','Platina']
+            'categories' => ['Prata', 'Diamante', 'Esmeralda', 'Platina']
         ]);
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseHas('customers', ['id' => $customer->id,'name' => $newName]);
+        $this->assertDatabaseHas('customers', ['id' => $customer->id, 'name' => $newName]);
 
         $this->assertDatabaseMissing('customer_categories', ['customer_id' => $customer->id, 'category_name' => 'Ouro']);
 
