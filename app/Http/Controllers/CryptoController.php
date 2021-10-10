@@ -7,6 +7,7 @@ use App\Services\MercadoBitcoin;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
+
 class CryptoController extends Controller
 {
     public function operation(CryptoOperationRequest $request, string $coin)
@@ -21,7 +22,7 @@ class CryptoController extends Controller
 
         } catch (\Throwable $e) {
             report($e);
-            return response()->json(['message' => 'Não foi possível recuperar as cotações.']);
+            return response()->json(['message' => 'Não foi possível recuperar as cotações.'], 500);
         }
 
         return response()->json($operation);
