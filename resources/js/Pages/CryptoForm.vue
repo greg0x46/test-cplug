@@ -143,11 +143,21 @@ export default defineComponent({
     },
     methods: {
         submit() {
+            if(!this.form.coin){
+                this.formErrors.coin = "The Coin field is required."
+                return;
+            }
+
             var url = 'api/crypto/' + this.form.coin
             axios.post(url, this.form).then(res => this.form.result = res.data).catch(function (error) {
-                this.formErrors.dataCompra = error.response.data.errors.dataCompra[0];
-                this.formErrors.dataVenda = error.response.data.errors.dataVenda[0];
-                this.formErrors.quantidade = error.response.data.errors.quantidade[0];
+                if(error.response.status == 422){
+                    this.formErrors.dataCompra = error.response.data?.errors?.dataCompra?.[0];
+                    this.formErrors.dataVenda = error.response.data?.errors?.dataVenda?.[0];
+                    this.formErrors.quantidade = error.response.data?.errors?.quantidade?.[0];
+                }else{
+                    alert("Desculpe, ocorreu um erro inesperado.")
+                }
+
             }.bind(this))
         },
     },

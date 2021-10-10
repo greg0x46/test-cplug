@@ -25,8 +25,9 @@ class CryptoOperationRequest extends FormRequest
     {
         return [
             'quantidade' => 'required|numeric|min:0|not_in:0',
-            'dataCompra' => 'required|date',
-            'dataVenda' => 'required|date'
+            'dataCompra' => 'required|date|before:today',
+            'dataVenda' => 'required|date|before:today|after_or_equal:dataCompra'
         ];
     }
+
 }
