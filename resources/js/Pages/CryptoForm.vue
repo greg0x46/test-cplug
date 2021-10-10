@@ -15,7 +15,7 @@
 
                             <select
                                 class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block w-full mt-1"
-                                v-model="form.coin"
+                                v-model="form.coin" required
                             >
                                 <option v-for="coin in coins" :value="coin" v-bind:value="coin">{{ coin }}</option>
                             </select>
